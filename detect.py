@@ -1,26 +1,22 @@
-import argparse
-
 from mxnet import nd, image
-
 import gluoncv as gcv
-gcv.utils.check_version('0.6.0')
+# gcv.utils.check_version('0.6.0')
 from gluoncv.data import ImageNet1kAttr
 from gluoncv.data.transforms.presets.imagenet import transform_eval
 from gluoncv.model_zoo import get_model
 from PIL import Image
 from PIL.ExifTags import TAGS
 import sys
+from geopy.geocoders import Nominatim
 
-# from geopy.geocoders import Nominatim
 
-def get_detections(filename, topK = 3):
+def detect_objects(filename, topK = 3):
     '''
     Runs model trained on ImageNet to detect objects in image.
     @param topK: how many top detections to return, default is 3
     @return img_classes: top k classes
     @return probs: probabilities of object being in each of the top k classes
     '''
-
     # Load pretrained model
     net = get_model('ResNet50_v2', pretrained = True)
     classes = net.classes
@@ -28,7 +24,6 @@ def get_detections(filename, topK = 3):
     img = image.imread(filename)
     img = transform_eval(img)
     pred = net(img)
-
     # Keep track of top classes and probabilities
     ind = nd.topk(pred, k=topK)[0].astype('int')
     img_classes = []
@@ -39,29 +34,50 @@ def get_detections(filename, topK = 3):
     return img_classes, probs
 
 
+def convert_tuple(exif_tuple):
+    '''
+    Converts 3-tuple representation of latitude and longitude into one number
+    @param exif_tuple: 3-tuple of degrees, minutes, and seconds
+    @return tuple converted into one value
+    '''
+    deg, min, sec = exif_tuple
+    return deg + min / 60 + sec / 3600
+
+
 def get_metadata(filename):
     '''
     Gets information from the metadata of the image.
     @param filename: name of the image
     @return location: location that the image was taken
     '''
+    # Get latitude and longitude if it has that data
     img = Image.open(filename)
-    img.verify()
-    exif = img._getexif()
+    metadata = dir(img)
+    latitude = 0
+    longitude = 0
+    if 'gps_latitude' in metadata:
+        latitude = convert_tuple(img.gps_latitude)
+    if 'gps_longitude' in metadata:
+        longitude = convert_tuple(img.gps_longitude)
+    # Revert latitude and longitude to location
+    geolocator = Nominatim(user_agent="my-application")
+    location = geolocator.reverse(str(latitude) + ", " + str(longitude))
+    return location.address
 
-    # Get location that image was taken
-    # coords = exif.items()[GPSInfo]
-    print(exif.items())
-    # location = geolocator.reverse("52.509669, 13.376294")
+
+def get_detection(filename):
+    '''
+    Get final detection.
+    @param filename
+    @return class of object detected or location where image was taken
+    '''
+    img_class, prob = detect_objects(filename, 1)
+    if prob[0] < 0.5:
+        img_class = get_metadata(filename)
+    return img_class
+
 
 if __name__ == '__main__':
     filename = sys.argv[1]
-    classes, probs = get_detections(filename, 1)
-    print("Classes:", classes)
-    print("Probs:", probs)
-    get_metadata(filename)
-# # If does not have any strong predictions, use image metadata
-# if (img_prob < 0.3):
-#     image = Image.open(opt.input_pic)
-#     image.verify()
-#     img_class = image._getexif()
+    detection = get_detection(filename)
+    print(detection)
