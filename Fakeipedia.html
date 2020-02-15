@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<style>
+	@charset "UTF-8";
+body {
+	background-color: white;
+	margin:0;
+}
+
+h1 {
+	color: black;
+	front-size:72px;
+	height: 50px;
+	text-align:center;
+	content-aligh:center;
+	padding-top: 50px;
+}
+
+h2 {
+	color: black;
+	front-size:36px;
+	text-align:left;
+	content-align:left;
+	margin-left: 10px;
+}
+div.banner{
+	background-color: #97D7E3;
+}
+
+	hr.new1 {
+	margin-top: 50px;
+	margin-left: -10px;;
+	margin-right: -10px;
+	cborder-top: 3px solid white;
+}
+	div.title{
+	background-color: white;
+	list-style-type: none;
+	padding: 50px;
+	}
+	div.title li a {
+	display: inline-block;
+	float: right;
+	text-decoration: none;
+	font-size: 20px;
+	color: #BB5F42;
+	padding: 10px;
+
+}
+
+div.title li a:hover {
+	background-color: ;
+	color: black;
+}
+
+div.intro{
+	background-color: white;
+	list-style-type: none;
+
+	
+	padding: 50px;
+	height: 5px;
+}
+
+div.tool{
+	align-content: center;
+	text-align:center;
+	background-color: #97D7E3;
+	list-style-type: none;
+	width: 200px;
+	padding: 40px;
+	position: relative;
+
+	}
+div.tool li a{
+color: white;
+	padding: 8px 16px;
+	text-decoration: none;
+}
+div.tool li a:hover {
+	color: black;
+}
+
+div.info{
+	background-color:#97D7E3 ;
+	list-style-type: none;
+	margin-top: 200px;
+	padding-top: 15px;
+	padding-bottom: 25px;
+	
+}
+div.info li a {
+	display: inline-block;
+	float: left;
+	text-decoration: none;
+	font-size: 15px;
+	color: black;
+	margin-left: 50px;
+
+}
+
+</style>
+</head>
+
+	<div class = "banner">
+	<img src = "treehacks logo.jpg" height = "100" width = "333">
+	</div>
+
+	<div class="title">
+	<li><b><font size="10" color = black>Fakeipidia</font></b></li>
+	</div>
+
+	<div class="intro">
+	<li><b><font size="5" color = black>intro</font></b></li>
+	</div>
+
+
+	<h1><center>Fake Wikipedia Page Generator</center></h1>
+	<div align = "center">
+	
+	<div class = "tool">
+		<li><a href="{% url 'upload' %}">Get started</a></li>     
+	</div>
+	
+	<div class ="info">
+	<li><a href="">Info</a></li>
+	<li><a href="">Contact Us</a></li>
+	</div>
