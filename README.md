@@ -1,1 +1,1 @@
-# fakipedia
+# wackipedia
