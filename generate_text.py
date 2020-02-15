@@ -11,7 +11,7 @@ class Text_Generator():
         gpt2.load_gpt2(sess, run_name=self.model_name)
         self.sess = sess
 
-    def generate_entry(self, prompt, n_samples = 1, top_k = 2):
+    def generate_entry(self, prompt, n_samples = 1, top_k = 1):
         """
         Prints out n_samples entries from a given prompt.
         @param prompt The prompt, or fixed prefix of the output entry.
