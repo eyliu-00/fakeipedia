@@ -119,10 +119,10 @@ def get_final_detection(filename):
             return get_location(filename)
     except:
         pass
-    return img_class
+    return img_class, prob
 
 
 if __name__ == '__main__':
     filename = sys.argv[1]
-    detection = get_final_detection(filename)
-    print(detection)
+    detection, prob = get_final_detection(filename)
+    print(detection, prob)
