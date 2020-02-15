@@ -7,8 +7,9 @@ class Text_Generator():
     def __init__(self, model_name='run1'):
         """ Load the pre-generated model. """
         sess = gpt2.start_tf_sess()
-        this.model_name = run_name
-        gpt2.load_gpt2(sess, run_name=model_name)
+        self.model_name = model_name
+        gpt2.load_gpt2(sess, run_name=self.model_name)
+        self.sess = sess
 
     def generate_entry(self, prompt, n_samples = 1, top_k = 2):
         """
@@ -19,5 +20,5 @@ class Text_Generator():
                Higher top_k usually means higher quality of output entries.
         @return None (the entries are printed to the console)
         """
-        gpt2.generate(sess, run_name=model_name, prefix='Caltech is',
+        gpt2.generate(self.sess, run_name=self.model_name, prefix=prompt,
             truncate='@@@', top_k=top_k, nsamples=n_samples)
