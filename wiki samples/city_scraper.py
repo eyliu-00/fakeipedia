@@ -18,10 +18,18 @@ def main():
         soup = BeautifulSoup(response.text, "html.parser")
         try:
             alltext = soup.find_all("div", class_="mw-parser-output")[0]
+            blurb = ""
+            n_blurbs = 0
             for tag in alltext.find_all("p", recursive = False):
                 if not tag.has_attr("class"):
-                    f.write(tag.text + "@@@\n")
-                    break
+                    text_len = len(tag.text)
+                    if (text_len < 400 and text_len > 200) or n_blurbs == 0:
+                        blurb += tag.text
+                        n_blurbs += 1
+                        if (n_blurbs > 4):
+                            break
+            if n_blurbs:
+                f.write(blurb + "@@@\n")
         except:
             continue
     f.close()

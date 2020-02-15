@@ -72,8 +72,11 @@ def get_detection(filename):
     @return class of object detected or location where image was taken
     '''
     img_class, prob = detect_objects(filename, 1)
-    if prob[0] < 0.5:
-        img_class = get_metadata(filename)
+    try:
+        if prob[0] < 0.5:
+            return get_metadata(filename)
+    except:
+        pass
     return img_class
 
 
