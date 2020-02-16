@@ -1,6 +1,7 @@
 from detect import *
 from generate_text import *
 from random import randrange
+from fake_name_generator import *
 
 import sys
 
@@ -10,6 +11,9 @@ def make_prefix(prompt, type='item'):
     the text of an article about it.
     """
     if type == 'item':
+        if prompt == 'person':
+            fake_name = generate_name()   # Create fake entry about person
+            return fake_name + "is"
         rand = randrange(3)
         if rand == 0:
             return prompt.capitalize() + "s are"
@@ -25,6 +29,8 @@ def make_prefix(prompt, type='item'):
             prompt = prompt.capitalize() + "is the"
         if rand == 2:
             prompt = prompt.capitalize() + "is a"
+    return prompt
+
 
 def main():
 
@@ -35,15 +41,15 @@ def main():
     filename = sys.argv[1]
 
     # Get item in image and assosiated probability
-    item, probability = get_detection(filename)
+    item, probability = get_final_detection(filename)
 
     # Get location where image was taken
-    location = get_metadata(filename)
+    location = get_location(filename)
 
     # Initialize text generator
     generator = Text_Generator()
 
-    if probability < 0.4 and location:
+    if probability < 0.5 and location:
         print(location)
         generator.generate_entry(make_prefix(location))
     else:
