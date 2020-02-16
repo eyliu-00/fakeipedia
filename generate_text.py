@@ -20,5 +20,5 @@ class Text_Generator():
                Higher top_k usually means higher quality of output entries.
         @return None (the entries are printed to the console)
         """
-        gpt2.generate(self.sess, run_name=self.model_name, prefix=prompt,
-            truncate='@@@', top_k=top_k, nsamples=n_samples)
+        return gpt2.generate(self.sess, run_name=self.model_name, prefix=prompt,
+            truncate='@@@', top_k=top_k, nsamples=n_samples, return_as_list=True)[0]

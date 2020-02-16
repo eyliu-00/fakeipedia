@@ -1,7 +1,6 @@
 from detect import *
 from generate_text import *
 from random import randrange
-from fake_name_generator import *
 
 import sys
 
@@ -11,26 +10,22 @@ def make_prefix(prompt, type='item'):
     the text of an article about it.
     """
     if type == 'item':
-        if prompt == 'person':
-            fake_name = generate_name()   # Create fake entry about person
-            return fake_name + "is"
         rand = randrange(3)
         if rand == 0:
-            return prompt.capitalize() + "s are"
+            prompt = prompt.capitalize() + "s are"
         if rand == 1:
-            prompt = "A " + prompt + "is a"
+            prompt = "A " + prompt + " is a"
         if rand == 2:
-            prompt = "A " + prompt + "is"
+            prompt = "A " + prompt + " is"
     if type == 'town':
         rand = randrange(3)
         if rand == 0:
-            return prompt.capitalize() + ", California is"
+            prompt = prompt.capitalize() + ", California is"
         if rand == 1:
-            prompt = prompt.capitalize() + "is the"
+            prompt = prompt.capitalize() + " is the"
         if rand == 2:
-            prompt = prompt.capitalize() + "is a"
+            prompt = prompt.capitalize() + " is a"
     return prompt
-
 
 def main():
 
@@ -41,20 +36,25 @@ def main():
     filename = sys.argv[1]
 
     # Get item in image and assosiated probability
-    item, probability = get_final_detection(filename)
+    item, probability = get_detection(filename)
 
     # Get location where image was taken
-    location = get_location(filename)
+    try:
+        location = get_location(filename)
+    except:
+        location = None
 
     # Initialize text generator
     generator = Text_Generator()
 
-    if probability < 0.5 and location:
+    if probability < 0.4 and location:
         print(location)
-        generator.generate_entry(make_prefix(location))
+        generator.generate_entry(make_prefix(location), type='town')
     else:
-        print(detection)
-        generator.generate_entry(make_prefix(item))
+        print(item)
+        prefix = make_prefix(item)
+        print(prefix)
+        generator.generate_entry(prefix)
 
 
 if __name__ == '__main__':
