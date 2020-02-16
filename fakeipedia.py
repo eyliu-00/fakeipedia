@@ -35,14 +35,7 @@ def main():
         return
     filename = sys.argv[1]
 
-    # Get item in image and assosiated probability
-    item, probability = get_detection(filename)
-
-    # Get location where image was taken
-    try:
-        location = get_location(filename)
-    except:
-        location = None
+    item, probability, location = get_final_detection(filename)
 
     # Initialize text generator
     generator = Text_Generator()

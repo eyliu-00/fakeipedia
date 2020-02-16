@@ -31,7 +31,6 @@ async def homepage(request):
     elif request.method == 'POST':
         params = await request.json()
     elif request.method == 'HEAD':
-        print("hello!!")
         return UJSONResponse({'text': ''},
                              headers=response_header)
 
@@ -43,7 +42,7 @@ async def homepage(request):
         fh.write(base64.b64decode(img_data))
 
 
-    prefix, prob = get_final_detection("img.jpg")
+    prefix, prob, location = get_final_detection("img.jpg")
     prefix = prefix.capitalize()
 
     # text = generator.generate_entry(prefix)

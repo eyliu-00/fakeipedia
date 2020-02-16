@@ -9,7 +9,9 @@ from PIL.ExifTags import TAGS
 from PIL.ExifTags import GPSTAGS
 import sys
 import geopy.geocoders
-from geopy.geocoders import Here
+from geopy.geocoders import Here, Nominatim
+import urllib
+import certifi
 
 def get_detection(filename):
     '''
@@ -101,8 +103,12 @@ def get_location(filename):
     lat = convert_to_decimal(gps_dict['GPSLatitude'], gps_dict['GPSLatitudeRef'])
     long = convert_to_decimal(gps_dict['GPSLongitude'], gps_dict['GPSLongitudeRef'])
     # Get full address
-    geolocator = Here(apikey = 'IJg_K6I_I6BWtaMEVIWz1B2qwUmgShfCi_hhpoFOJWo')
+    geolocator = Nominatim()
+    def uo(args, **kwargs):
+       return urllib.request.urlopen(args, cafile=certifi.where(), **kwargs)
+    geolocator.urlopen = uo
     address = str(geolocator.reverse((lat, long)))
+
     # Get city
     return get_city(address)
 
@@ -115,14 +121,13 @@ def get_final_detection(filename):
     '''
     img_class, prob = get_detection(filename)
     try:
-        if prob[0] < 0.5:
-            return get_location(filename)
+        location = get_location(filename)
     except:
-        pass
-    return img_class, prob
+        location = None
+    return img_class, prob, location
 
 
 if __name__ == '__main__':
     filename = sys.argv[1]
     detection, prob = get_final_detection(filename)
-    print(detection, prob)
+    print(detection, prob, get_location(filename))
