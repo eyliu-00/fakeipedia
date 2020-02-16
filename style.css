@@ -1,0 +1,60 @@
+body {
+  background-image: white;
+}
+p {
+  color: #555;
+  font: 20px 'Oswald';
+  padding: 30px;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+h1 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+h2, h3 {
+  color: #555;
+  font: 50px 'Oswald';
+  font-weight: bold;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+image {
+  margin: 0px;
+  padding: 0px 0px 0px 0px;
+}
+
+.hero {
+  color: #fff;
+  font-size: 80px;
+  font-family: 'Oswald';
+  padding: 100px 60px 10px 60px;
+  text-align: center;
+  background-image: url("banner.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+.form {
+  text-align: center;
+}
+
+.btn {
+  border-radius: 5px;
+  color: #555;
+  cursor: pointer;
+  display: center;
+  font-weight: 400;
+  letter-spacing: .5px;
+  margin: 0;
+  text-transform: uppercase;
+}
+.btn-alt {
+  border: 1px solid #555;
+  padding: 10px 30px;
+}
+.btn-alt:hover {
+  background: #6DC0D5;
+  color: #648880;
+}
