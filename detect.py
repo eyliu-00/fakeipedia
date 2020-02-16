@@ -103,14 +103,15 @@ def get_location(filename):
     lat = convert_to_decimal(gps_dict['GPSLatitude'], gps_dict['GPSLatitudeRef'])
     long = convert_to_decimal(gps_dict['GPSLongitude'], gps_dict['GPSLongitudeRef'])
     # Get full address
-    geolocator = Nominatim()
+    geolocator = Nominatim(timeout=10)
     def uo(args, **kwargs):
        return urllib.request.urlopen(args, cafile=certifi.where(), **kwargs)
     geolocator.urlopen = uo
-    address = str(geolocator.reverse((lat, long)))
+    # print(geolocator.reverse((lat, long)))
 
-    # Get city
-    return get_city(address)
+    address = geolocator.reverse((lat, long))
+
+    return address.raw['address']['city']
 
 
 def get_final_detection(filename):
@@ -120,14 +121,15 @@ def get_final_detection(filename):
     @return class of object detected or location where image was taken
     '''
     img_class, prob = get_detection(filename)
+    location = None
     try:
         location = get_location(filename)
     except:
-        location = None
+        pass
     return img_class, prob, location
 
 
 if __name__ == '__main__':
     filename = sys.argv[1]
-    detection, prob = get_final_detection(filename)
-    print(detection, prob, get_location(filename))
+    detection, prob, location = get_final_detection(filename)
+    print(detection, prob, location)
