@@ -35,19 +35,19 @@ def main():
         return
     filename = sys.argv[1]
 
-    item, probability, location = get_final_detection(filename)
-
-    # Initialize text generator
-    generator = Text_Generator()
-
-    if probability < 0.4 and location:
-        print(location)
-        generator.generate_entry(make_prefix(location), type='town')
-    else:
-        print(item)
-        prefix = make_prefix(item)
-        print(prefix)
-        generator.generate_entry(prefix)
+    # item, probability, location = get_final_detection(filename)
+    #
+    # # Initialize text generator
+    # generator = Text_Generator()
+    #
+    # if probability < 0.4 and location:
+    #     print(location)
+    #     generator.generate_entry(make_prefix(location), type='town')
+    # else:
+    #     print(item)
+    #     prefix = make_prefix(item)
+    #     print(prefix)
+    #     generator.generate_entry(prefix)
 
 
 if __name__ == '__main__':
