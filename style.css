@@ -40,21 +40,27 @@ image {
   text-align: center;
 }
 
+.upload-btn-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
 .btn {
-  border-radius: 5px;
-  color: #555;
-  cursor: pointer;
-  display: center;
-  font-weight: 400;
-  letter-spacing: .5px;
-  margin: 0;
-  text-transform: uppercase;
+  border: 2px solid gray;
+  color: gray;
+  background-color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
 }
-.btn-alt {
-  border: 1px solid #555;
-  padding: 10px 30px;
-}
-.btn-alt:hover {
-  background: #6DC0D5;
-  color: #648880;
+
+.upload-btn-wrapper input[type=file] {
+  margin: 10px;
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
 }

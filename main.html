@@ -34,7 +34,11 @@
       <form method=post enctype=multipart/form-data>
         <p class="text-light">
         <!-- <input type=file name=file> -->
-        <input type='file' />
+        <div class="upload-btn-wrapper">
+          <button class="btn">Upload an Image</button>
+          <input type="file" />
+        </div>
+        <!-- <br><img id="uploadedImg" src="#" alt="Your Image" /> -->
       <!-- </br><img id="myImg" src="#" alt="Your Image" width = 200> -->
         <!-- </br><img id="myImg" src="#" alt="your image" height=200 width=100> -->
 
@@ -58,8 +62,16 @@
             };
 
         </script>
-        <a class="btn btn-alt" href="index_api_ui_copy.html">Proceed</a>
-        </p>
+        <br>
+        <!-- <a class="btn" href="index_api_ui_copy.html">Submit</a> -->
+        <!-- <div class="upload-btn-wrapper">
+          <button class="btn">Submit</button>
+          <a class = "btn" href="index_api_ui_copy.html">Submit</a>
+        </div> -->
+        <a href="index_api_ui_copy.html">Submit</a>
+
+
+        <!-- </p> -->
       </form>
     </div>
 
