@@ -5,15 +5,14 @@ import tensorflow as tf
 import uvicorn
 import os
 import gc
+import base64
 
-from fakeipedia import *
+# from fakeipedia import *
+from detect import *
 
 app = Starlette(debug=False)
 
-generator = Text_Generator()
-
-# sess = gpt2.start_tf_sess(threads=1)
-# gpt2.load_gpt2(sess)
+# generator = Text_Generator()
 
 # Needed to avoid cross-domain issues
 response_header = {
@@ -21,7 +20,6 @@ response_header = {
 }
 
 generate_count = 0
-
 
 @app.route('/', methods=['GET', 'POST', 'HEAD'])
 async def homepage(request):
@@ -33,38 +31,28 @@ async def homepage(request):
     elif request.method == 'POST':
         params = await request.json()
     elif request.method == 'HEAD':
+        print("hello!!")
         return UJSONResponse({'text': ''},
                              headers=response_header)
 
-    prefix = params.get('prefix', '')[:500]
 
-    text = generator.generate_entry(prefix)
-    # text = gpt2.generate(sess,
-    #                      length=int(params.get('length', 1023)),
-    #                      temperature=float(params.get('temperature', 0.7)),
-    #                      # top_k = 0,
-    #                      # temperature = 0.7,
-    #                      # length = 1000,
-    #                      # top_k=int(params.get('top_k', 0)),
-    #                      top_p=float(params.get('top_p', 0)),
-    #                      prefix=prefix,
-    #                      truncate=params.get('truncate', None),
-    #                      include_prefix=str(params.get(
-    #                          'include_prefix', True)).lower() == 'true',
-    #                      return_as_list=True
-    #                      )[0]
+    img_data = params.get('image')
+    img_data = img_data[img_data.find(',') + 1:]
+
+    with open("img.jpg", "wb") as fh:
+        fh.write(base64.b64decode(img_data))
+
+
+    prefix, prob = get_final_detection("img.jpg")
+    prefix = prefix.capitalize()
+
+    # text = generator.generate_entry(prefix)
+    text = 'Hello friends'
 
     generate_count += 1
-    # if generate_count == 8:
-        # Reload model to prevent Graph/Session from going OOM
-        # tf.reset_default_graph()
-        # sess.close()
-        # sess = gpt2.start_tf_sess(threads=1)
-        # gpt2.load_gpt2(sess)
-        # generate_count = 0
 
     gc.collect()
-    return UJSONResponse({'text': text},
+    return UJSONResponse({'text': text, 'prefix': prefix},
                          headers=response_header)
 
 if __name__ == '__main__':

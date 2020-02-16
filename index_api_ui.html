@@ -361,8 +361,6 @@
           }
 
           var gentext = gentext.replace(/\n\n/g, "<div><br></div>").replace(/\n/g, "<div></div>");
-          // var html = '<div class=\"gen-box\">' + gentext + '</div><div class="gen-border"></div>';
-          // $(html).appendTo('#model-output').hide().fadeIn("slow");
           var otherhtml = '<p>' + gentext + '</p>'
           document.getElementById("the-answer").innerHTML = otherhtml;
         },
