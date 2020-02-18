@@ -12,18 +12,14 @@ from fakeipedia import *
 app = Starlette(debug=False)
 
 generator = Text_Generator()
-completer = Text_Generator(model_name = "124M")
 
 # Needed to avoid cross-domain issues
 response_header = {
     'Access-Control-Allow-Origin': '*'
 }
 
-generate_count = 0
-
 @app.route('/', methods=['GET', 'POST', 'HEAD'])
 async def homepage(request):
-    global generate_count
     global generator
 
     if request.method == 'GET':
@@ -34,23 +30,28 @@ async def homepage(request):
         return UJSONResponse({'text': ''},
                              headers=response_header)
 
-
     img_data = params.get('image')
     img_data = img_data[img_data.find(',') + 1:]
 
     with open("img.jpg", "wb") as fh:
         fh.write(base64.b64decode(img_data))
 
-
     item, prob, location = get_final_detection("img.jpg")
-    prefix = ""
+    title = ""
+    text = ""
     if prob < 0.4 and location:
-        prefix = make_prefix(location)
+        title = location.capitalize()
+        prefix = make_prefix(location, type='town')
+        # text = generator.generate_entry(prefix)
     else:
-        prefix = make_prefix(item.capitalize())
-
+        title = item.capitalize()
+        prefix = make_prefix(title, type='item')
+        # text = generator.generate_entry('', run=None, model="124M")
     text = generator.generate_entry(prefix)
+
     # text = ''.join(text.split("@@@")[:-1])
+    # text = completer.generate_entry(text)
+    # text = text.join(text.split(".")[:-1])
 
     # Replace [i] with citations.
     for i in range(1, 10):
@@ -66,13 +67,8 @@ async def homepage(request):
                 text = text.replace(word + " ", '{}{}{}'.format(
                     '<a href="#">', word + " ", '</a>'))
 
-    text2 = completer.generate_entry(text, length=500)
-    text = text.join(text2.split(".")[:-1])
-
-    generate_count += 1
-
     gc.collect()
-    return UJSONResponse({'text': text, 'prefix': item.capitalize()},
+    return UJSONResponse({'text': text, 'prefix': title},
                          headers=response_header)
 
 if __name__ == '__main__':

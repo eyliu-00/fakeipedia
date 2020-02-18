@@ -19,17 +19,22 @@ def main():
         try:
             alltext = soup.find_all("div", class_="mw-parser-output")[0]
             blurb = ""
-            n_blurbs = 0
+            len_blurbs = 0
             for tag in alltext.find_all("p", recursive = False):
-                if not tag.has_attr("class"):
-                    text_len = len(tag.text)
-                    if (text_len < 400 and text_len > 200) or n_blurbs == 0:
-                        blurb += tag.text
-                        n_blurbs += 1
-                        if (n_blurbs > 4):
-                            break
-            if n_blurbs:
-                f.write(blurb + "@@@\n")
+                f.write(tag.text)
+                # if not tag.has_attr("class"):
+                #     text_len = len(tag.text)
+                #     len_blurbs += text_len
+                #     # if (text_len < 400 and text_len > 200) or n_blurbs == 0:
+                #     blurb += tag.text
+                #     print(blurb)
+                #     n_blurbs += 1
+                #     if (len_blurbs > 1400):
+                #         break
+            # print(blurb)
+
+            f.write("@@@\n")
+
         except:
             continue
     f.close()
